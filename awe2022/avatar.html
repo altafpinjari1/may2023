@@ -1,0 +1,126 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/dist/mindar-image.prod.js"></script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.0.0/dist/mindar-image-aframe.prod.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function(){
+        // detect click event
+        const firstPlane = document.querySelector('#playButton');
+        const firstTarget = document.querySelector('#first-target');
+        // firstPlane.addEventListener("click", event => {
+        //   console.log("click");
+        //   document.querySelector('#jurrasic').play();
+        //   firstPlane.setAttribute("visible", false);
+        // });
+        firstTarget.addEventListener("targetFound", event => {
+          console.log("target found");
+          document.querySelector('#avatar').play();
+          firstPlane.setAttribute("visible", false);
+        });
+        firstTarget.addEventListener("targetLost", event => {
+          console.log("target lost");
+          document.querySelector('#jurrasic').pause(); 
+        });
+      });
+    </script>
+    <style>
+       @font-face{
+            font-family: raleway;
+            src: url(fonts/Raleway-Regular.ttf) format("truetype");
+        }
+
+        @font-face{
+            font-family: ralewaybold;
+            src: url(fonts/Raleway-Bold.ttf) format("truetype");
+        }
+
+        body{
+            font-family: raleway;
+            margin: 0px;
+        }
+      .d-none{
+            display:none !important;
+        }
+        
+      .play-backdrop{
+              width:100%;
+              height:100%;
+              position:fixed;
+              left:0;
+              top:0;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              z-index:100;
+              background-color:rgba(0,0,0,0.4);
+          }
+          .play-content{
+              width:95%;
+              max-width:400px;
+              height:auto;
+              background-color:white;
+              border-radius:8px;
+              padding:20px;
+              text-align:center;
+              justify-content:center;
+              font-size:16px;
+              font-family:proximanova;
+          }
+          .play-button{
+            display:inline-block;
+            background-image: url("images/button-bg.png");
+            background-size: 100% 100%;
+            width: 50%;
+            text-align: center;
+            padding: 1rem;
+            color: white;
+            margin: auto;
+            font-size: larger;
+            cursor: pointer;
+          }
+
+          .button p{
+            margin: 0;
+        }
+		
+    </style>
+  </head>
+  <body>
+    <main>
+      <a-scene mindar-image="imageTargetSrc: targets2.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+        <a-assets>
+          <video id="avatar" src="./videos/Avatar2.mp4" muted preload="auto" loop="true" playsinline webkit-playsinline ></video>
+          <!-- <img id="playbtn" src="img/play.png"> -->
+        </a-assets>
+  
+        <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable"></a-camera>
+  
+        <a-entity id="first-target" mindar-image-target="targetIndex: 3">
+          <a-video src="#avatar"  id="first" webkit-playsinline playsinline width="1" height="0.552"  position="0 0 0" material geometry></a-video>
+          <!-- <a-image src="#playbtn" class="clickable" id="playButton" alpha-test="0.5" height="0.552" width="1" material geometry></a-image> -->
+        </a-entity>
+      </a-scene>
+    </main>    
+    <div class="play-backdrop">
+      <div class="play-content">
+          <p style="color:black; margin: 1em auto;">
+             Allow Camera. <br/><br/>Scan Avatar movie poster to enjoy immersive experience.
+          </p>
+          <div class="play-button"><p>Start Experience</p></div>
+      </div>
+    </div>
+    <script>
+      var playButton = document.querySelector('.play-button');
+      var video = document.getElementById("avatar");
+      playButton.addEventListener('click', function(){
+        //document.getElementById("bg_music").play();
+        document.querySelector('.play-backdrop').classList.add('d-none');
+        video.muted=!video.muted;
+      });
+    </script>
+  </body>
+</html>
